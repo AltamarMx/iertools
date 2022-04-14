@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='geetools',
-    version='0.0.12',
+    version='0.1.0',
     author='Guillermo Barrios',
     author_email='gbv@ier.unam.mx',
     description='Testing installation of Package',
