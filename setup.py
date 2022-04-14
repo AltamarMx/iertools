@@ -17,6 +17,6 @@ setuptools.setup(
     },
     license='MIT',
     packages=['geetools'],
-    install_requires=['requests','pandas','numpy','json','datetime'],
+    install_requires=['requests','pandas','numpy','datetime'],
 )
 
