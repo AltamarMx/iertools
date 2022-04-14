@@ -133,7 +133,7 @@ class TB:
         #df[key] = pd.to_numeric(df[key])
 #         df = df.resample("60S").pad()
         df.dropna(inplace=True)
-        
+        df.index += pd.Timedelta('-6H')
         self.datos = df
         return df
 
