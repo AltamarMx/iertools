@@ -1,5 +1,6 @@
 
 def wd(df):
+    """ receives dataframe with u,v,w, returns ws,wd added """
     DperR = 180/np.pi
     df['ugeo'] = -df.v
     df['vgeo'] = -df.u
