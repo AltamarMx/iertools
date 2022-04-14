@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='geetools',
-    version='0.0.7',
+    version=‘0.0.8’,
     author='Guillermo Barrios',
     author_email='gbv@ier.unam.mx',
     description='Testing installation of Package',
@@ -17,5 +17,5 @@ setuptools.setup(
     },
     license='MIT',
     packages=['geetools'],
-    install_requires=['requests','pandas','numpy'],
+    install_requires=['requests','pandas','numpy’,’dateutil’,’time’],
 )
