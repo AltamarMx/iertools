@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='geetools',
+    name=‘geetools',
     version=‘0.0.8’,
     author='Guillermo Barrios',
     author_email='gbv@ier.unam.mx',
@@ -19,3 +19,4 @@ setuptools.setup(
     packages=['geetools'],
     install_requires=['requests','pandas','numpy’,’dateutil’,’time’,’json’,’datetime’],
 )
+
