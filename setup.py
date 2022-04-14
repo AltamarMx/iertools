@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name=‘geetools',
-    version=‘0.0.8’,
+    name='geetools',
+    version='0.0.8',
     author='Guillermo Barrios',
     author_email='gbv@ier.unam.mx',
     description='Testing installation of Package',
