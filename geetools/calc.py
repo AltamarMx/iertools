@@ -1,3 +1,5 @@
+import numpy as np
+
 
 def wd(df):
     """ receives dataframe with u,v,w, returns ws,wd added """
