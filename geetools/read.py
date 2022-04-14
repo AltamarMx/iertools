@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import ipython_genutils
 
-class sql:
+class read_sql:
     def __init__(self,file,read="all",rename=False):
         
         self.myconn = sql.connect(file)
