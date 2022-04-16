@@ -113,11 +113,17 @@ class read_sql:
         self.data.rename(columns=dict(zip(old_names, new_names)), inplace=True)
         self.vars = self.data.columns
         self.vars_numbered = [i for i in enumerate(self.vars)]
-        
-    def get_data(self, names):
-        #result = [variable for name in names for variable in self.vars if name in variable]
-        #return self._data[result]
+
+    @property
+    def data(self):
+        """
+        Dataframe with output variables
+        """  
         return self._data
+
+    def get_data(self, names):
+        result = [variable for name in names for variable in self.vars if name in variable]
+        return self._data[result]
 
     def get_construction(self,names_cs,round=4):
 #         all = []
