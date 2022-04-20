@@ -86,7 +86,7 @@ class read_sql:
             self.construction_systems = mlc.NameConstruction.unique()
 
     @classmethod
-    def create_json_from_rvi(cls, file_path, use_gee_names = True):
+    def json_from_rvi(cls, file_path, use_gee_names = True):
         # If the file has not finished with "rvi", it will launch an error
         assert file_path[-3:] == "rvi" , "The extension of file must be 'rvi'"
         # Open file and save lines in rvi

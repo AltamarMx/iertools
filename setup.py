@@ -5,10 +5,10 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='geetools',
-    version='0.1.0',
+    version='0.2.0',
     author='Guillermo Barrios',
     author_email='gbv@ier.unam.mx',
-    description='Testing installation of Package',
+    description='New Package fitted for Energy Building Group (GEE)',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/AltamarMx/geetools',
