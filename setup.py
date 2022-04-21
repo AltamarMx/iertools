@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='geetools',
-    version='0.3.0',
+    version='0.3.1',
     author='Guillermo Barrios',
     author_email='gbv@ier.unam.mx',
     description='New Package fitted for Energy Building Group (GEE)',
