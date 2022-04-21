@@ -137,10 +137,12 @@ def sunpath():
         ax.set_rticks(range(0,90,10))
         ax.grid(color = 'gray', linestyle = 'dotted', linewidth = 1 )
         ax.set_rmax(90)
-        ax.set_rmin(0)
+        ax.set_rmin(0)        
+        plt.grid()
+
     #     plt.title('Stereographic sun path diagram',)
         plt.show()
-        plt.savefig('stereograph.png')
+#         plt.savefig('stereograph.png')
 #     print(etiqueta)
     
     interact(angulo,phi = (.5,89.,.5),day=(1,365,10),hour=(0,24,1))
