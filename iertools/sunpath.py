@@ -138,7 +138,7 @@ def sunpath():
         ax.grid(color = 'gray', linestyle = 'dotted', linewidth = 1 )
         ax.set_rmax(90)
         ax.set_rmin(0)        
-        plt.grid()
+        ax.grid()
 
     #     plt.title('Stereographic sun path diagram',)
         plt.show()

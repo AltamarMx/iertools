@@ -1,4 +1,3 @@
-
 import sqlite3 as sql
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -36,6 +35,7 @@ class read_sql:
             self.variables = variables
             
             self.vars = variables.variable_name.unique()
+            vars = variables.variable_name.unique()
             self.vars_numbered = [i for i in enumerate(self.vars)]
             
             command = "SELECT tm.TimeIndex, tm.Year, tm.Month, tm.Day, tm.Hour, tm.Minute FROM Time AS tm"
@@ -84,7 +84,7 @@ class read_sql:
             mlc = pd.merge(ml,c)
             self.mlc = mlc
             self.construction_systems = mlc.NameConstruction.unique()
-
+        self.myconn.close()
     @classmethod
     def json_from_rvi(cls, file_path, use_gee_names = True):
         # If the file has not finished with "rvi", it will launch an error
@@ -99,21 +99,38 @@ class read_sql:
             var_name = var.split('\n')[0].replace(',', ':')
             cols_json[var_name] = var_name
         if (use_gee_names):
-            variables  = cols_json.keys()
-            for variable in variables:
-                if "Zone Mean Air Temperature" in variable:
-                    Ti_variables = "Ti_" + variable.split(":")[0].replace(" ","")
-                    cols_json[variable] = Ti_variables
-                if "Site Outdoor Air Dry" in variable:
-                    cols_json[variable] = "To"
+            read_sql.__rename(cols_json)
         return cols_json
 
+    def json_from_sql(self, use_gee_names = True):
+        variables = self.vars
+        cols_json = {}
+        for variable in variables:
+            cols_json.update({variable:variable})
+        if use_gee_names:
+            read_sql.__rename(cols_json)
+            
+        return cols_json
+    def __rename(cols_json):
+        variables  = cols_json.keys()
+        for variable in variables:
+            if "Zone Mean Air Temperature" in variable:
+                Ti_variables = "Ti_" + variable.split(":")[0].replace(" ","")
+                cols_json[variable] = Ti_variables
+            if "Site Outdoor Air Dry" in variable:
+                cols_json[variable] = "To"
+#         return cols_json
     def rename_cols(self,columns,new_names):
         old_names = self.data.columns[columns]
         self.data.rename(columns=dict(zip(old_names, new_names)), inplace=True)
         self.vars = self.data.columns
         self.vars_numbered = [i for i in enumerate(self.vars)]
-
+    def rename_from_json(self,file_path):
+        ''' To be developed'''
+        pass
+    def to_json(self,diccionario,json_path):
+        '''To be developed'''
+        pass
     @property
     def data(self):
         """
