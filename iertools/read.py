@@ -1,3 +1,4 @@
+# %load ../iertools/read.py
 import sqlite3 as sql
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -57,16 +58,16 @@ class read_sql:
             
             # If json doesn't exists, extract all output variables, else create dataframe only with output variables inside dictionary
             if cols_json == None:
-                self._data = df
+                self.data = df
             else:
-                self._data = pd.DataFrame()
+                self.data = pd.DataFrame()
                 for col_name in df.columns:
                     for key in cols_json.keys():
                         if key in col_name:
-                            self._data[cols_json[key]] = df[col_name]
+                            self.data[cols_json[key]] = df[col_name]
                             break
                 if "date" in cols_json.keys():
-                    self._data.index.names = [cols_json["date"]]
+                    self.data.index.names = [cols_json["date"]]
         
         if (read=="construction") or (read=="all"):
 #             print("aca")
@@ -102,15 +103,19 @@ class read_sql:
             read_sql.__rename(cols_json)
         return cols_json
 
-    def json_from_sql(self, use_gee_names = True):
+    def rename_from_sql(self):
         variables = self.vars
         cols_json = {}
         for variable in variables:
             cols_json.update({variable:variable})
-        if use_gee_names:
-            read_sql.__rename(cols_json)
-            
+        read_sql.__rename(cols_json)
+#         self.vars = self.data.columns
+#         print(self.vars)
         return cols_json
+    def rename(self,columns,inplace=True):
+        self.data.rename(columns=columns,inplace=True)
+        self.vars = self.data.columns
+        self.vars_numbered = [i for i in enumerate(self.vars)]
     def __rename(cols_json):
         variables  = cols_json.keys()
         for variable in variables:
@@ -119,6 +124,16 @@ class read_sql:
                 cols_json[variable] = Ti_variables
             if "Site Outdoor Air Dry" in variable:
                 cols_json[variable] = "To"
+            if "Wind Speed" in variable:
+                cols_json[variable] = "ws"
+            if "Wind Direction" in variable:
+                cols_json[variable] = "wd"
+            if "Site Outdoor Air Relative Humidity" in variable:
+                cols_json[variable] = "hr"
+            if "Environment:Site Diffuse Solar Radiation Rate" in variable:
+                cols_json[variable] = "Id"
+            if "Environment:Site Direct Solar Radiation Rate" in variable:
+                cols_json[variable] = "Ib"
 #         return cols_json
     def rename_cols(self,columns,new_names):
         old_names = self.data.columns[columns]
@@ -131,16 +146,16 @@ class read_sql:
     def to_json(self,diccionario,json_path):
         '''To be developed'''
         pass
-    @property
-    def data(self):
-        """
-        Dataframe with output variables
-        """  
-        return self._data
+#     @property
+#     def data(self):
+#         """
+#         Dataframe with output variables
+#         """  
+#         return self._data
 
     def get_data(self, names):
         result = [variable for name in names for variable in self.vars if name in variable]
-        return self._data[result]
+        return self.data[result]
 
     def get_construction(self,names_cs,round=4):
 #         all = []
