@@ -5,8 +5,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='iertools',
-    version='0.3.5',
-    author=['Guillermo Barrios','Efraín Puerto Castellanos'],
+    version='0.4.0',
+    author=['Guillermo Barrios','Efraín Puerto Castellanos','Benjamin Santamaria'],
     author_email=['gbv@ier.unam.mx','eapc@ier.unam.mx'],
     description='New Package fitted for Energy Building Group (GEE)',
     long_description=long_description,
