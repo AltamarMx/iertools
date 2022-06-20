@@ -2,6 +2,7 @@
 import sqlite3 as sql
 import pandas as pd
 import matplotlib.pyplot as plt
+import warnings
 #import ipython_genutils
 
 class read_sql:
