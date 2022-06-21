@@ -202,7 +202,7 @@ class read_sql:
 
 
 
-def read_epw(file,year=None):
+def read_epw(file,year=None,alias=False):
     """
     Read EPW file 
     
@@ -210,6 +210,7 @@ def read_epw(file,year=None):
     ----------
     file -- path location of EPW file
     year -- None default to leave intact the year or change if desired. It raises a warning.
+    alias -- False default, True to change to To, Ig, Ib, Ws, RH, ...
     
     Properties:
     data -- pandas dataframe with data extracted of SQL file
@@ -220,7 +221,7 @@ def read_epw(file,year=None):
     construction_systems -- Construction Systems found inside SQL file
     """
   
-    nombres = ['Year',
+    names = ['Year',
                'Month',
                'Day',
                'Hour',
@@ -247,7 +248,17 @@ def read_epw(file,year=None):
                'Visibility',
                'Ceiling Height',
                'Present Weather Observation']
-    data = pd.read_csv(file,skiprows=8,header=None,names=nombres,usecols=range(27))
+    
+    rename = { 'To':'Dry Bulb Temperature',
+               'Dew Point Temperature',
+               'RH':'Relative Humidity',
+               'P':'Atmospheric Station Pressure',
+               'Ig':'Global Horizontal Radiation',
+               'Ib':'Direct Normal Radiation',
+               'Id':'Diffuse Horizontal Radiation',
+               'Wd':'Wind Direction',
+               'Ws':'Wind Speed'}
+    data = pd.read_csv(file,skiprows=8,header=None,names=names,usecols=range(27))
     data.Minute = 0
     data.loc[data.Hour==24,['Hour','Minute']] = [23,59]
     if year != None:
@@ -261,4 +272,6 @@ def read_epw(file,year=None):
     del data['Day']
     del data['Hour']
     del data['Minute']
+    if alias:
+        data.rename(columns=rename,inplace=True)
     return data
