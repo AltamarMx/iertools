@@ -316,24 +316,23 @@ def to_epw(file,df,epw_file):
               'Wd':'Wind Direction'              ,
               'Ws':'Wind Speed'                  }
     
-    df.rename(columns=rename,inplace=True)
-    df['Year']    = df.index.year
-    df['Month']   = df.index.month
-    df['Day']     = df.index.day
-    df['Hour']    = df.index.hour
-    df['Minute']  = 60
+    df2 = df.copy()
+    df2.rename(columns=rename,inplace=True)
+    df2['Year']    = df2.index.year
+    df2['Month']   = df2.index.month
+    df2['Day']     = df2.index.day
+    df2['Hour']    = df2.index.hour
+    df2['Minute']  = 60
     
     
     with open(epw_file) as myfile:
         head = [next(myfile) for x in range(8)]
-#     print(head)   
     
     epw_header = ''
     for texto in head:
         epw_header += texto
-#     print(epw_header)
         
-    df[names].to_csv(file,header=None,index=False)
+    df2[names].to_csv(file,header=None,index=False)
     with open(file) as f:
         epw = f.read()
     
