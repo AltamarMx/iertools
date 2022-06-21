@@ -240,7 +240,9 @@ def read_epw(file,year=None,alias=False):
                'Opaque Sky Cover',
                'Visibility',
                'Ceiling Height',
-               'Present Weather Observation']
+               'Present Weather Observation',
+               'Present Weather Codes','Precipitable Water','Aerosol Optical Depth','Snow Depth','Days Since Last Snowfall',
+               'Albedo','Liquid Precipitation Depth','Liquid Precipitation Quantity']
     
     rename = {'Dry Bulb Temperature'        :'To',
               'Relative Humidity'           :'RH',
@@ -250,7 +252,7 @@ def read_epw(file,year=None,alias=False):
               'Diffuse Horizontal Radiation':'Id',
               'Wind Direction'              :'Wd',
               'Wind Speed'                  :'Ws'}
-    data = pd.read_csv(file,skiprows=8,header=None,names=names,usecols=range(27))
+    data = pd.read_csv(file,skiprows=8,header=None,names=names,usecols=range(35))
     data.Minute = 0
     data.loc[data.Hour==24,['Hour','Minute']] = [23,59]
     if year != None:
@@ -279,6 +281,8 @@ def to_epw(file,df,epw_file):
     file -- path location of EPW file
     """
   
+    
+  
     names = ['Year',
                'Month',
                'Day',
@@ -305,7 +309,10 @@ def to_epw(file,df,epw_file):
                'Opaque Sky Cover',
                'Visibility',
                'Ceiling Height',
-               'Present Weather Observation']
+               'Present Weather Observation',
+               'Present Weather Codes','Precipitable Water','Aerosol Optical Depth','Snow Depth','Days Since Last Snowfall',
+               'Albedo','Liquid Precipitation Depth','Liquid Precipitation Quantity']
+    
     
     rename = {'To':'Dry Bulb Temperature'        ,
               'RH':'Relative Humidity'           ,
