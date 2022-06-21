@@ -212,13 +212,6 @@ def read_epw(file,year=None,alias=False):
     year -- None default to leave intact the year or change if desired. It raises a warning.
     alias -- False default, True to change to To, Ig, Ib, Ws, RH, ...
     
-    Properties:
-    data -- pandas dataframe with data extracted of SQL file
-    variables -- name of variables using energyplus notation
-    vars -- ??
-    vars_numbered -- ??
-    mlc -- ??
-    construction_systems -- Construction Systems found inside SQL file
     """
   
     names = ['Year',
@@ -274,3 +267,158 @@ def read_epw(file,year=None,alias=False):
     if alias:
         data.rename(columns=rename,inplace=True)
     return data
+
+
+
+
+
+
+def to_epw(df,file):
+    """
+    Save dataframe to EPW 
+    
+    Arguments:
+    ----------
+    file -- path location of EPW file
+    """
+  
+    names = ['Year',
+               'Month',
+               'Day',
+               'Hour',
+               'Minute',
+               'Data Source and Uncertainty Flags',
+               'Dry Bulb Temperature',
+               'Dew Point Temperature',
+               'Relative Humidity',
+               'Atmospheric Station Pressure',
+               'Extraterrestrial Horizontal Radiation',
+               'Extraterrestrial Direct Normal Radiation',
+               'Horizontal Infrared Radiation Intensity',
+               'Global Horizontal Radiation',
+               'Direct Normal Radiation',
+               'Diffuse Horizontal Radiation',
+               'Global Horizontal Illuminance',
+               'Direct Normal Illuminance',
+               'Diffuse Horizontal Illuminance',
+               'Zenith Luminance',
+               'Wind Direction',
+               'Wind Speed',
+               'Total Sky Cover',
+               'Opaque Sky Cover',
+               'Visibility',
+               'Ceiling Height',
+               'Present Weather Observation']
+    
+    rename = {'To':'Dry Bulb Temperature'        ,
+              'RH':'Relative Humidity'           ,
+              'P' :'Atmospheric Station Pressure',
+              'Ig':'Global Horizontal Radiation' ,
+              'Ib':'Direct Normal Radiation'     ,
+              'Id':'Diffuse Horizontal Radiation',
+              'Wd':'Wind Direction'              ,
+              'Ws':'Wind Speed'                  }
+    
+    df.rename(columns=rename,inplace=True)
+    df['year']    = df.index.year
+    df['month']     = df.index.month
+    df['day']     = df.index.day
+    df['hour']    = df.index.hour
+    df['minute'] = df.index.minute
+    
+    
+    
+    
+    data.Minute = 0
+    data.loc[data.Hour==24,['Hour','Minute']] = [23,59]
+    if year != None:
+        data.Year = year
+        warnings.warn("Year has been changed, be carefull")
+    data['tiempo'] = data.Year.astype('str') + '-' + data.Month.astype('str')  + '-' + data.Day.astype('str') + ' ' + data.Hour.astype('str') + ':' + data.Minute.astype('str') 
+    data.tiempo = pd.to_datetime(data.tiempo,format='%Y-%m-%d %H:%M')
+    data.set_index('tiempo',inplace=True)
+    del data['Year']
+    del data['Month']
+    del data['Day']
+    del data['Hour']
+    del data['Minute']
+    if alias:
+        data.rename(columns=rename,inplace=True)
+    return data
+
+def to_epw(file,df,epw_file):
+    """
+    Save dataframe to EPW 
+    
+    Arguments:
+    ----------
+    file -- path location of EPW file
+    """
+  
+    names = ['Year',
+               'Month',
+               'Day',
+               'Hour',
+               'Minute',
+               'Data Source and Uncertainty Flags',
+               'Dry Bulb Temperature',
+               'Dew Point Temperature',
+               'Relative Humidity',
+               'Atmospheric Station Pressure',
+               'Extraterrestrial Horizontal Radiation',
+               'Extraterrestrial Direct Normal Radiation',
+               'Horizontal Infrared Radiation Intensity',
+               'Global Horizontal Radiation',
+               'Direct Normal Radiation',
+               'Diffuse Horizontal Radiation',
+               'Global Horizontal Illuminance',
+               'Direct Normal Illuminance',
+               'Diffuse Horizontal Illuminance',
+               'Zenith Luminance',
+               'Wind Direction',
+               'Wind Speed',
+               'Total Sky Cover',
+               'Opaque Sky Cover',
+               'Visibility',
+               'Ceiling Height',
+               'Present Weather Observation']
+    
+    rename = {'To':'Dry Bulb Temperature'        ,
+              'RH':'Relative Humidity'           ,
+              'P' :'Atmospheric Station Pressure',
+              'Ig':'Global Horizontal Radiation' ,
+              'Ib':'Direct Normal Radiation'     ,
+              'Id':'Diffuse Horizontal Radiation',
+              'Wd':'Wind Direction'              ,
+              'Ws':'Wind Speed'                  }
+    
+    df.rename(columns=rename,inplace=True)
+    df['Year']    = df.index.year
+    df['Month']     = df.index.month
+    df['Day']     = df.index.day
+    df['Hour']    = df.index.hour
+    df['Minute'] = df.index.minute
+    
+    
+    with open(epw_file) as myfile:
+        head = [next(myfile) for x in range(8)]
+#     print(head)   
+    
+    epw_header = ''
+    for texto in head:
+        epw_header += texto
+#     print(epw_header)
+        
+    df[names].to_csv(file,header=None,index=False)
+    with open(file) as f:
+        epw = f.read()
+    
+    epw_tail = ''
+    for texto in epw:
+        epw_tail += texto
+    epw = epw_header + epw_tail
+    
+    
+    with open(file, 'w') as f:
+        f.write(epw)
+
