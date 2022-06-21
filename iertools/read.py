@@ -265,8 +265,7 @@ def read_epw(file,year=None,alias=False):
     del data['Hour']
     del data['Minute']
     if alias:
-        data.rename(columns=rename,inplace=True)
-        print('renombrado')
+        data = data.rename(columns=rename,inplace=True)
     return data
 
 
