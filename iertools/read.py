@@ -249,15 +249,14 @@ def read_epw(file,year=None,alias=False):
                'Ceiling Height',
                'Present Weather Observation']
     
-    rename = { 'To':'Dry Bulb Temperature',
-               'Dew Point Temperature',
-               'RH':'Relative Humidity',
-               'P':'Atmospheric Station Pressure',
-               'Ig':'Global Horizontal Radiation',
-               'Ib':'Direct Normal Radiation',
-               'Id':'Diffuse Horizontal Radiation',
-               'Wd':'Wind Direction',
-               'Ws':'Wind Speed'}
+    rename = {'To':'Dry Bulb Temperature',
+              'RH':'Relative Humidity',
+              'P':'Atmospheric Station Pressure',
+              'Ig':'Global Horizontal Radiation',
+              'Ib':'Direct Normal Radiation',
+              'Id':'Diffuse Horizontal Radiation',
+              'Wd':'Wind Direction',
+              'Ws':'Wind Speed'}
     data = pd.read_csv(file,skiprows=8,header=None,names=names,usecols=range(27))
     data.Minute = 0
     data.loc[data.Hour==24,['Hour','Minute']] = [23,59]
