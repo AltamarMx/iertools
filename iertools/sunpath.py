@@ -124,7 +124,7 @@ def sunpath():
         rad = np.pi/180.; deg = 180./np.pi; contador =  0
 #         plt.xkcd()
         plt.figure(figsize=(5,5))
-        ax = plt.subplot(111, projection='polar')
+        ax = plt.subplot( projection='polar')
     #     print(ax.annotate.__doc__)
         for d in range(len(angulo)):
             ax.plot(angulo[d]*rad,r[d],color='gray',linewidth=2)
