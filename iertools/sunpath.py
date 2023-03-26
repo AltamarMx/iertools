@@ -123,7 +123,7 @@ def sunpath():
         r_horario = np.array(r_horario) 
         rad = np.pi/180.; deg = 180./np.pi; contador =  0
 #         plt.xkcd()
-        plt.figure(figsize=(7,7))
+        plt.figure(figsize=(8,8))
         ax = plt.subplot( projection='polar')
     #     print(ax.annotate.__doc__)
         for d in range(len(angulo)):
