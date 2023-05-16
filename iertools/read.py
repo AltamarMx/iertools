@@ -51,7 +51,7 @@ class read_sql:
             data_variables_time = pd.merge(data_variables,time)
             df = data_variables_time.copy()
             df['date'] = pd.to_datetime(df[['Year','Month','Day']])
-            df.loc[df.Hour==24,'date'] += pd.Timedelta('1D')
+            #df.loc[df.Hour==24,'date'] += pd.Timedelta('1D')
             df.loc[df.Hour==24,'Hour'] = 0
             df['date'] = pd.to_datetime(df[['Year','Month','Day','Hour','Minute']])
             df['variable_name'] = df.KeyValue + ':' + df.Name + ' (' + df.Units + ')'
