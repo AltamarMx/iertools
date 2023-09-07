@@ -3,12 +3,11 @@ import sqlite3 as sql
 import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
-#import ipython_genutils
+
 
 class read_sql:
     """
     Read the SQL output of energyplus file, it's able to extract output variables reported by energyplus simulation or construction systems of the model
-
     Arguments:
     ----------
     file -- path location of SQL file
@@ -50,9 +49,7 @@ class read_sql:
             data_variables = pd.merge(data,self.variables)
             data_variables_time = pd.merge(data_variables,time)
             df = data_variables_time.copy()
-#             df['date'] = pd.to_datetime(df[['Year','Month','Day']])
-            #df.loc[df.Hour==24,'date'] += pd.Timedelta('1D')
-#             df.loc[df.Hour==24,'Hour'] = 0
+            
             df['date'] = pd.to_datetime(df[['Year','Month','Day','Hour','Minute']])
             df['variable_name'] = df.KeyValue + ':' + df.Name + ' (' + df.Units + ')'
             df  = df.pivot_table(index="date", columns="variable_name", values="Value")
@@ -103,38 +100,41 @@ class read_sql:
         if (use_gee_names):
             read_sql.__rename(cols_json)
         return cols_json
-
+        
+    def rename(self,columns,inplace=True):
+        self.data.rename(columns=columns,inplace=True)
+        self.vars = self.data.columns
+        self.vars_numbered = [i for i in enumerate(self.vars)]
+    @property
     def rename_from_sql(self):
         variables = self.vars
         cols_json = {}
         for variable in variables:
             cols_json.update({variable:variable})
         read_sql.__rename(cols_json)
-#         self.vars = self.data.columns
-#         print(self.vars)
-        return cols_json
-    def rename(self,columns,inplace=True):
-        self.data.rename(columns=columns,inplace=True)
-        self.vars = self.data.columns
-        self.vars_numbered = [i for i in enumerate(self.vars)]
+        self.names = cols_json
+        read_sql.rename(self,columns = cols_json)
     def __rename(cols_json):
         variables  = cols_json.keys()
         for variable in variables:
-            if "Zone Mean Air Temperature" in variable:
-                Ti_variables = "Ti_" + variable.split(":")[0].replace(" ","")
-                cols_json[variable] = Ti_variables
-            if "Site Outdoor Air Dry" in variable:
-                cols_json[variable] = "To"
-            if "Wind Speed" in variable:
-                cols_json[variable] = "ws"
-            if "Wind Direction" in variable:
-                cols_json[variable] = "wd"
-            if "Site Outdoor Air Relative Humidity" in variable:
-                cols_json[variable] = "hr"
-            if "Environment:Site Diffuse Solar Radiation Rate" in variable:
-                cols_json[variable] = "Id"
-            if "Environment:Site Direct Solar Radiation Rate" in variable:
-                cols_json[variable] = "Ib"
+            try:
+                if "Zone Mean Air Temperature" in variable:
+                    Ti_variables = "Ti_" + variable.split(":")[0].replace(" ","")
+                    cols_json[variable] = Ti_variables
+                if "Site Outdoor Air Dry" in variable:
+                    cols_json[variable] = "To"
+                if "Wind Speed" in variable:
+                    cols_json[variable] = "ws"
+                if "Wind Direction" in variable:
+                    cols_json[variable] = "wd"
+                if "Site Outdoor Air Relative Humidity" in variable:
+                    cols_json[variable] = "hr"
+                if "Environment:Site Diffuse Solar Radiation Rate" in variable:
+                    cols_json[variable] = "Id"
+                if "Environment:Site Direct Solar Radiation Rate" in variable:
+                    cols_json[variable] = "Ib"
+            except:
+                pass
 #         return cols_json
     def rename_cols(self,columns,new_names):
         old_names = self.data.columns[columns]
@@ -147,12 +147,7 @@ class read_sql:
     def to_json(self,diccionario,json_path):
         '''To be developed'''
         pass
-#     @property
-#     def data(self):
-#         """
-#         Dataframe with output variables
-#         """  
-#         return self._data
+        
 
     def get_data(self, names):
         result = [variable for name in names for variable in self.vars if name in variable]
@@ -174,15 +169,6 @@ class read_sql:
             InsideAbsorpThermal = cs.InsideAbsorpThermal.unique()
             OutsideAbsorpThermal = cs.OutsideAbsorpThermal.unique()
             OutsideRoughness = cs.OutsideRoughness.unique()
-#             dictio = {'Construction system':name_cs,
-#                       'Total thickness':thickness,
-#                       'Total layers':total_layers,
-#                       'InsideAbsorpVis':InsideAbsopVis,
-#                       "OutsideAbsorpVis":OutsideAbsopVis,
-#                       "OutsideAbsorpSolar":OutsideAbsorpSolar,
-#                       "InsideAbsorpThermal":InsideAbsorpThermal,
-#                       "OutsideRoughness":OutsideRoughness
-#                      }
             print('\n')
             print(f'Construction system:\033[1m{name_cs}\033[0m')
             print(f'Total thickness    :{thickness} m')
@@ -196,9 +182,6 @@ class read_sql:
             display(cs[properties].style.hide_index())
             print('\n\n\n')
 #         return all
-
-
-
 
 
 
