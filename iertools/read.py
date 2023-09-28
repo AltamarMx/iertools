@@ -236,13 +236,20 @@ def read_epw(file,year=None,alias=False):
               'Wind Direction'              :'Wd',
               'Wind Speed'                  :'Ws'}
     data = pd.read_csv(file,skiprows=8,header=None,names=names,usecols=range(35))
-    data.Minute = 0
-    data.loc[data.Hour==24,['Hour','Minute']] = [23,59]
+#     data.Minute = 0
+#     data.loc[data.Hour==24,['Hour','Minute']] = [23,59]
+    data.Hour = data.Hour -1
     if year != None:
         data.Year = year
         warnings.warn("Year has been changed, be carefull")
-    data['tiempo'] = data.Year.astype('str') + '-' + data.Month.astype('str')  + '-' + data.Day.astype('str') + ' ' + data.Hour.astype('str') + ':' + data.Minute.astype('str') 
-    data.tiempo = pd.to_datetime(data.tiempo,format='%Y-%m-%d %H:%M')
+    try:
+        data['tiempo'] = data.Year.astype('str') + '-' + data.Month.astype('str')  + '-' + data.Day.astype('str') + ' ' + data.Hour.astype('str') + ':' + data.Minute.astype('str') 
+        data.tiempo = pd.to_datetime(data.tiempo,format='%Y-%m-%d %H:%M')
+    except:
+        data.Minute = 0
+        data['tiempo'] = data.Year.astype('str') + '-' + data.Month.astype('str')  + '-' + data.Day.astype('str') + ' ' + data.Hour.astype('str') + ':' + data.Minute.astype('str') 
+        data.tiempo = pd.to_datetime(data.tiempo,format='%Y-%m-%d %H:%M')
+        
     data.set_index('tiempo',inplace=True)
     del data['Year']
     del data['Month']
@@ -252,6 +259,8 @@ def read_epw(file,year=None,alias=False):
     if alias:
         data.rename(columns=rename,inplace=True)
     return data
+
+
 
 
 
