@@ -29,56 +29,56 @@ class read_sql:
     construction_systems -- Construction Systems found inside SQL file
     """
 
-    def __init__(self,file,read="all",cols_json=None,alias=False):
+    def __init__(self,file,cols_json=None,alias=False):
         """
         Read the SQL output of energyplus file
         """
         self.myconn = sql.connect(file)
-        if (read=="data") or (read=="all"):
-            command = "SELECT ReportDataDictionaryIndex, KeyValue, Name, Units FROM ReportDataDictionary"
-            variables = pd.read_sql_query(command,con=self.myconn)
+        # if (read=="data") or (read=="all"):
+        command = "SELECT ReportDataDictionaryIndex, KeyValue, Name, Units FROM ReportDataDictionary"
+        variables = pd.read_sql_query(command,con=self.myconn)
 
-            variables['variable_name'] = variables.KeyValue + ':' + variables.Name + ' (' + variables.Units + ')'
-            #self.variables = variables
-            
-            self.vars = variables.variable_name.unique()
-            vars = variables.variable_name.unique()
-            self.vars_numbered = [i for i in enumerate(self.vars)]
-            
-            command = "SELECT tm.TimeIndex, tm.Year, tm.Month, tm.Day, tm.Hour, tm.Minute FROM Time AS tm"
-            time = pd.read_sql_query(command,con=self.myconn)
-            time = time[time.Year!=0]
-            command = """SELECT ReportData.TimeIndex, ReportData.ReportDataDictionaryIndex, ReportData.Value
-              FROM (ReportData INNER JOIN ReportDataDictionary ON ReportData.ReportDataDictionaryIndex = ReportDataDictionary.ReportDataDictionaryIndex) 
-              INNER JOIN Time ON ReportData.TimeIndex = Time.TimeIndex"""
-            data = pd.read_sql_query(command,con=self.myconn)
-            data_variables = pd.merge(data,variables)
-            data_variables_time = pd.merge(data_variables,time)
-            df = data_variables_time.copy()
-            
-            df['date'] = pd.to_datetime(df[['Year','Month','Day','Hour','Minute']])
-            df['variable_name'] = df.KeyValue + ':' + df.Name + ' (' + df.Units + ')'
-            df  = df.pivot_table(index="date", columns="variable_name", values="Value")
-            
-            self.data = df
+        variables['variable_name'] = variables.KeyValue + ':' + variables.Name + ' (' + variables.Units + ')'
+        #self.variables = variables
         
+        self.vars = variables.variable_name.unique()
+        vars = variables.variable_name.unique()
+        self.vars_numbered = [i for i in enumerate(self.vars)]
         
-        if (read=="construction") or (read=="all"):
+        command = "SELECT tm.TimeIndex, tm.Year, tm.Month, tm.Day, tm.Hour, tm.Minute FROM Time AS tm"
+        time = pd.read_sql_query(command,con=self.myconn)
+        time = time[time.Year!=0]
+        command = """SELECT ReportData.TimeIndex, ReportData.ReportDataDictionaryIndex, ReportData.Value
+          FROM (ReportData INNER JOIN ReportDataDictionary ON ReportData.ReportDataDictionaryIndex = ReportDataDictionary.ReportDataDictionaryIndex) 
+          INNER JOIN Time ON ReportData.TimeIndex = Time.TimeIndex"""
+        data = pd.read_sql_query(command,con=self.myconn)
+        data_variables = pd.merge(data,variables)
+        data_variables_time = pd.merge(data_variables,time)
+        df = data_variables_time.copy()
+        
+        df['date'] = pd.to_datetime(df[['Year','Month','Day','Hour','Minute']])
+        df['variable_name'] = df.KeyValue + ':' + df.Name + ' (' + df.Units + ')'
+        df  = df.pivot_table(index="date", columns="variable_name", values="Value")
+        
+        self.data = df
+    
+        
+        # if (read=="construction") or (read=="all"):
 #             print("aca")
-            command = """SELECT * FROM  Materials """
-            m       = pd.read_sql_query(command,con=self.myconn)
-            m = m.rename(columns={'Name': 'NameMaterial'})
-            # 
-            command = """SELECT * FROM  Constructions """
-            c = pd.read_sql_query(command,con=self.myconn)
-            c = c.rename(columns={'Name': 'NameConstruction'})
-            # 
-            command = """SELECT * FROM  ConstructionLayers """
-            l = pd.read_sql_query(command,con=self.myconn)
-            ml   = pd.merge(m,l)
-            mlc = pd.merge(ml,c)
-            self.mlc = mlc
-            self.construction_systems = mlc.NameConstruction.unique()
+        command = """SELECT * FROM  Materials """
+        m       = pd.read_sql_query(command,con=self.myconn)
+        m = m.rename(columns={'Name': 'NameMaterial'})
+        # 
+        command = """SELECT * FROM  Constructions """
+        c = pd.read_sql_query(command,con=self.myconn)
+        c = c.rename(columns={'Name': 'NameConstruction'})
+        # 
+        command = """SELECT * FROM  ConstructionLayers """
+        l = pd.read_sql_query(command,con=self.myconn)
+        ml   = pd.merge(m,l)
+        mlc = pd.merge(ml,c)
+        self.mlc = mlc
+        self.construction_systems = mlc.NameConstruction.unique()
         self.myconn.close()
 
         variables = self.vars
@@ -150,7 +150,8 @@ class read_sql:
             print(f"InsideAbsorpThermal:{InsideAbsorpThermal}")
             print(f"OutsideRoughness:{OutsideRoughness}")
             properties = ['NameMaterial','Conductivity', 'Density','SpecHeat', 'Thickness']
-            display(cs[properties].style.hide_index())
+            # display(cs[properties].style.hide_index())
+            display(cs[properties])
             print('\n\n\n')
 #         return all
 
