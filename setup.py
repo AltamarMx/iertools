@@ -17,5 +17,5 @@ setuptools.setup(
     },
     license='MIT',
     packages=['iertools'],
-    install_requires=['requests','pandas','numpy','datetime','sqlite3'],
+    install_requires=['requests','pandas','numpy','datetime'],
 )
