@@ -5,8 +5,8 @@ EPW.
 
 Instala con:
 
-'''
+´´´
 pip install git+https://github.com/AltamarMx/iertools.git
-'''
+´´´
 
 En el folder notebooks encontrarás varios ejemplos del uso de cada paquete.
