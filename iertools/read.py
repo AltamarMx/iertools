@@ -150,7 +150,7 @@ class read_sql:
             print(f"InsideAbsorpThermal:{InsideAbsorpThermal}")
             print(f"OutsideRoughness:{OutsideRoughness}")
             properties = ['NameMaterial','Conductivity', 'Density','SpecHeat', 'Thickness']
-            display(cs[properties].style.hide_index())
+            display(cs[properties])
             #print(cs[properties])
             print('\n\n\n')
         #return a1+a2+a3+a4+a5+a6+a7+a8+a9+a10
