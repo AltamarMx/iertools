@@ -140,19 +140,20 @@ class read_sql:
             InsideAbsorpThermal = cs.InsideAbsorpThermal.unique()
             OutsideAbsorpThermal = cs.OutsideAbsorpThermal.unique()
             OutsideRoughness = cs.OutsideRoughness.unique()
-            print('\n')
-            print(f'Construction system:\033[1m{name_cs}\033[0m')
-            print(f'Total thickness    :{thickness} m')
-            print(f'Total layers:{total_layers}')
-            print(f"InsideAbsorpVis:{InsideAbsopVis}")
-            print(f"OutsideAbsorpVis:{OutsideAbsopVis}")
-            print(f"OutsideAbsorpSolar:{OutsideAbsorpSolar}")
-            print(f"InsideAbsorpThermal:{InsideAbsorpThermal}")
-            print(f"OutsideRoughness:{OutsideRoughness}")
+            a1 = ('\n')
+            a2 = (f'Construction system:\033[1m{name_cs}\033[0m')
+            a3 = (f'Total thickness    :{thickness} m')
+            a4 = (f'Total layers:{total_layers}')
+            a5 = (f"InsideAbsorpVis:{InsideAbsopVis}")
+            a6 = (f"OutsideAbsorpVis:{OutsideAbsopVis}")
+            a7 = (f"OutsideAbsorpSolar:{OutsideAbsorpSolar}")
+            a8 = (f"InsideAbsorpThermal:{InsideAbsorpThermal}")
+            a9 = (f"OutsideRoughness:{OutsideRoughness}")
             properties = ['NameMaterial','Conductivity', 'Density','SpecHeat', 'Thickness']
             # display(cs[properties].style.hide_index())
-            print(cs[properties])
+            a10 = (cs[properties])
             print('\n\n\n')
+        return a1+a2+a3+a4+a5+a6+a7+a8+a9+a10
 #         return all
 
 
