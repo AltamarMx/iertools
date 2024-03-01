@@ -151,7 +151,7 @@ class read_sql:
             print(f"OutsideRoughness:{OutsideRoughness}")
             properties = ['NameMaterial','Conductivity', 'Density','SpecHeat', 'Thickness']
             # display(cs[properties].style.hide_index())
-            display(cs[properties])
+            print(cs[properties])
             print('\n\n\n')
 #         return all
 
