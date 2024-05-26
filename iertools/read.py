@@ -214,8 +214,8 @@ def read_epw(file,year=None,alias=False,warns=True):
     data.Hour = data.Hour -1
     if year != None:
         data.Year = year
-            if warns == True:
-                warnings.warn("Year has been changed, be carefull")
+        if warns == True:
+            warnings.warn("Year has been changed, be carefull")
     try:
         data['tiempo'] = data.Year.astype('str') + '-' + data.Month.astype('str')  + '-' + data.Day.astype('str') + ' ' + data.Hour.astype('str') + ':' + data.Minute.astype('str') 
         data.tiempo = pd.to_datetime(data.tiempo,format='%Y-%m-%d %H:%M')
