@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='iertools',
-    version='0.6.0',
+    version='0.8.0',
     author=['Guillermo Barrios','Efraín Puerto Castellanos'],
     author_email=['gbv@ier.unam.mx','eapc@ier.unam.mx'],
     description='Package to load data from SQL files in EnergyPlus ',
@@ -17,5 +17,5 @@ setuptools.setup(
     },
     license='MIT',
     packages=['iertools'],
-    install_requires=['requests','pandas','numpy','datetime','sqlite3'],
+    install_requires=['requests','pandas','numpy','datetime'],
 )
