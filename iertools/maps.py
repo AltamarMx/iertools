@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-class mapas:
+class IlluminanceDataVisualizer:
     '''Clase para visualizar datos de iluminancia.
 
     Esta clase proporciona métodos para leer datos de iluminancia, calcular el índice de distribución útil de la luz del día (UDI), y visualizar mapas de iluminancia y UDI.
