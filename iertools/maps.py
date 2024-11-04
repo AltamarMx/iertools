@@ -53,7 +53,9 @@ class IlluminanceDataVisualizer:
         # self.matrix_shape = matrix_shape
         self.data = None
         self.matrices = None
-        self.udi_maps = None
+        self.udi_maps = None        
+        self.umbral_mascara = 4_000
+
     
         # Leer el archivo, omitir las primeras cuatro filas de encabezado
         try:
@@ -242,7 +244,6 @@ class IlluminanceDataVisualizer:
         cbar.set_label('Illuminancia [lux]')
         plt.title(f'{datetime_str}')
         plt.show()
-        self.umbral_mascara = 4_000
         if mask:
             mascara = np.where(self.matrices[datetime_str]> self.umbral_mascara)
             np.save("../masks/mascara.npy",mascara)
