@@ -1,9 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 
 class IlluminanceDataVisualizer:
     '''Clase para visualizar datos de iluminancia.
@@ -32,7 +29,7 @@ class IlluminanceDataVisualizer:
     visualize_illuminance(datetime_str, cmap="jet", vmin=0, vmax=3000)
         Visualiza la matriz de iluminancia para una fecha y hora específica.'''
 
-    def __init__(self, file_path):
+    def __init__(self, file_path,f_mask=None):
         '''
         Inicializa una instancia de IlluminanceDataVisualizer.
 
@@ -43,9 +40,16 @@ class IlluminanceDataVisualizer:
         matrix_shape : tuple of int, opcional
             Tamaño de la matriz para representar los datos de iluminancia (por defecto es (20, 10)).
         '''
+        self.mascara = None
+        if f_mask != None:
+            m = np.load(f_mask)
+            m = tuple(m)
+            self.mascara = m
+
+
         self.file_path = file_path
         self._generate_grid_from_header()
-
+        
         # self.matrix_shape = matrix_shape
         self.data = None
         self.matrices = None
@@ -67,9 +71,12 @@ class IlluminanceDataVisualizer:
         
         # Convertir cada renglón a una matriz del tamaño especificado
         self.matrices = self.data.apply(lambda row: np.array(row).reshape(self.matrix_shape), axis=1)
+        if self.mascara != None:
+            def aplicar_mascara(matriz):
+                matriz[self.mascara] = np.nan  # Asignar NaN a esas posiciones
+                return matriz  # Convertir de vuelta a lista de listas si es necesario
+            self.matrices.apply(lambda x: aplicar_mascara(x))
 
-
-    
     
     def _generate_grid_from_header(self):
         """
@@ -104,10 +111,6 @@ class IlluminanceDataVisualizer:
 
             
         
-        # # Ejemplo de uso
-        # file_path = 'ruta/al/archivo.csv'
-        # x_grid, y_grid = generate_grid_from_header(file_path)
-
 
     def _calculate_udi(self, illum_min=300, illum_max=2000):
         '''Calcula los índices de distribución útil de la luz del día (UDI).
@@ -131,6 +134,9 @@ class IlluminanceDataVisualizer:
         udi_sub = np.zeros(self.matrix_shape)
         udi_util = np.zeros(self.matrix_shape)
         udi_sobre = np.zeros(self.matrix_shape)
+        # udi_sub = np.nan
+        # udi_util = np.nan
+        # udi_sobre = np.nan
         
         # Iterar sobre cada fila y calcular UDI
         for _, row in filtered_data.iterrows():
@@ -150,6 +156,14 @@ class IlluminanceDataVisualizer:
         udi_sum_check = self.udi_maps["UDI_sub"] + self.udi_maps["UDI_util"] + self.udi_maps["UDI_sobre"]
         if not np.allclose(udi_sum_check, 100, atol=1e-2):
             raise ValueError("La suma de los UDI no es igual a 100 en todos los puntos de la matriz.")
+
+        if self.mascara != None:
+        #     def aplicar_mascara(matriz):
+        #         matriz[self.mascara] = np.nan  # Asignar NaN a esas posiciones
+        #         return matriz  # Convertir de vuelta a lista de listas si es necesario
+            self.udi_maps["UDI_sub"][self.mascara] = np.nan
+            self.udi_maps["UDI_util"][self.mascara] = np.nan
+            self.udi_maps["UDI_sobre"][self.mascara] = np.nan
 
  
     def visualize_udi(self, illum_min=300, illum_max=2000, cmap='jet', num_levels=10):
@@ -199,7 +213,7 @@ class IlluminanceDataVisualizer:
         plt.show()
         return fig, axes
 
-    def visualize_illuminance(self, datetime_str, cmap="jet", vmin=0, vmax=3000):
+    def visualize_illuminance(self, datetime_str, cmap="jet", vmin=0, vmax=3000, mask=False):
         '''Visualiza la matriz de iluminancia para una fecha y hora específica, considerando la razón de aspecto del grid.
     
         Parámetros:
@@ -228,5 +242,12 @@ class IlluminanceDataVisualizer:
         cbar.set_label('Illuminancia [lux]')
         plt.title(f'{datetime_str}')
         plt.show()
+        self.umbral_mascara = 4_000
+        if mask:
+            mascara = np.where(self.matrices[datetime_str]> self.umbral_mascara)
+            np.save("../masks/mascara.npy",mascara)
+        
+
+            
 
 
