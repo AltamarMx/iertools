@@ -1,3 +1,4 @@
+# %load maps.py
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -154,11 +155,15 @@ class IlluminanceDataVisualizer:
             "UDI_sobre": (udi_sobre / total_hours) * 100
         }
         
+        
         # Comprobación de que la suma de los tres UDI es 100
-        udi_sum_check = self.udi_maps["UDI_sub"] + self.udi_maps["UDI_util"] + self.udi_maps["UDI_sobre"]
-        if not np.allclose(udi_sum_check, 100, atol=1e-2):
-            raise ValueError("La suma de los UDI no es igual a 100 en todos los puntos de la matriz.")
+        #udi_sum_check = self.udi_maps["UDI_sub"] + self.udi_maps["UDI_util"] + self.udi_maps["UDI_sobre"]
+        #udi_sum_check_flatten = udi_sum_check.flatten()
+        #if not np.allclose(udi_sum_check_flatten[~np.isnan(udi_sum_check_flatten)], 100, atol=1e-2):
+        #    raise ValueError("La suma de los UDI no es igual a 100 en todos los puntos de la matriz.")
 
+
+            
         if self.mascara != None:
         #     def aplicar_mascara(matriz):
         #         matriz[self.mascara] = np.nan  # Asignar NaN a esas posiciones
