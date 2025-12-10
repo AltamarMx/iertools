@@ -11,9 +11,9 @@ setuptools.setup(
     description='Package to load data from SQL files in EnergyPlus ',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/AltamarMx/geetools',
+    url='https://github.com/AltamarMx/iertools',
     project_urls = {
-        "Bug Tracker": "https://github.com/AltamarMx/geetools/issues"
+        "Bug Tracker": "https://github.com/AltamarMx/iertools/issues"
     },
     license='MIT',
     packages=['iertools'],

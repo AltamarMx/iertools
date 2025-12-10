@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iertools"
+version = "0.8.4"
+description = "Package to load data from SQL files in EnergyPlus"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Guillermo Barrios", email = "gbv@ier.unam.mx"},
+    {name = "Efraín Puerto Castellanos", email = "eapc@ier.unam.mx"}
+]
+requires-python = ">=3.8"
+dependencies = [
+    "requests",
+    "pandas",
+    "numpy",
+]
+
+[project.urls]
+Homepage = "https://github.com/AltamarMx/iertools"
+"Bug Tracker" = "https://github.com/AltamarMx/iertools/issues"
+
+[tool.setuptools]
+packages = ["iertools"]
