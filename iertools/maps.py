@@ -96,8 +96,8 @@ class IlluminanceDataVisualizer:
         xmin, ymin, _, xmax, _, _, _, ymax, _, xspacing, yspacing = map(float, header_data)
         
         # Determinar el número de puntos en cada dirección
-        num_x_points = int(((xmax - xmin) / xspacing)) 
-        num_y_points = int(((ymax - ymin) / yspacing)) 
+        num_x_points = int(((xmax - xmin) / xspacing) + 0.5) 
+        num_y_points = int(((ymax - ymin) / yspacing) + 0.5) 
         
         # Actualizar la forma de la matriz
         self.matrix_shape = (num_y_points, num_x_points)
