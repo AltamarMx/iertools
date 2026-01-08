@@ -209,9 +209,19 @@ def read_epw(file,year=None,alias=False,warns=True):
               'Wind Direction'              :'Wd',
               'Wind Speed'                  :'Ws'}
     data = pd.read_csv(file,skiprows=8,header=None,names=names,usecols=range(35))
-#     data.Minute = 0
-#     data.loc[data.Hour==24,['Hour','Minute']] = [23,59]
-    data.Hour = data.Hour -1
+
+    # Handle Hour 24: EPW uses period-ending convention (hours 1-24)
+    # Hour 24 represents 00:00 of the next day, needs special handling
+    mask_24 = data.Hour == 24
+    if mask_24.any():
+        data.loc[mask_24, 'Hour'] = 0
+        # Use datetime arithmetic to properly handle day/month/year rollover
+        temp_dates = pd.to_datetime(data.loc[mask_24, ['Year', 'Month', 'Day']])
+        temp_dates = temp_dates + pd.Timedelta(days=1)
+        data.loc[mask_24, 'Year'] = temp_dates.dt.year
+        data.loc[mask_24, 'Month'] = temp_dates.dt.month
+        data.loc[mask_24, 'Day'] = temp_dates.dt.day
+
     if year != None:
         data.Year = year
         if warns == True:
@@ -295,7 +305,19 @@ def to_epw(file,df,epw_file):
     df2['Month']   = df2.index.month
     df2['Day']     = df2.index.day
     df2['Hour']    = df2.index.hour
-    df2['Minute']  = 60
+    df2['Minute']  = 0
+
+    # Handle Hour 0: pandas uses hours 0-23, EPW uses period-ending 1-24
+    # Hour 0 (00:00) represents Hour 24 of previous day in EPW
+    mask_0 = df2['Hour'] == 0
+    if mask_0.any():
+        df2.loc[mask_0, 'Hour'] = 24
+        # Subtract 1 day using datetime arithmetic to handle month/year rollover
+        temp_dates = pd.to_datetime(df2.loc[mask_0, ['Year', 'Month', 'Day']])
+        temp_dates = temp_dates - pd.Timedelta(days=1)
+        df2.loc[mask_0, 'Year'] = temp_dates.dt.year
+        df2.loc[mask_0, 'Month'] = temp_dates.dt.month
+        df2.loc[mask_0, 'Day'] = temp_dates.dt.day
     
     
     with open(epw_file) as myfile:
