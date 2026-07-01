@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
 import json
+import io
 import datetime
 from dateutil.parser import parse
 import numpy as np
@@ -117,7 +118,7 @@ class TB:
 #         print(timeseries)
         telemetry = requests.get(timeseries, headers=headers)
 #         time.sleep(10)
-        datos = pd.read_json(telemetry.text, orient=None)
+        datos = pd.read_json(io.StringIO(telemetry.text), orient=None)
 #         print(datos)
         df = pd.DataFrame([i for i in datos[key]])
         df.ts = pd.to_datetime(df.ts,unit='ms')

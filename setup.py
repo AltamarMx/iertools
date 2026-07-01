@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='iertools',
-    version='0.8.4',
+    version='0.8.5',
     author=['Guillermo Barrios','Efraín Puerto Castellanos'],
     author_email=['gbv@ier.unam.mx','eapc@ier.unam.mx'],
     description='Package to load data from SQL files in EnergyPlus ',
