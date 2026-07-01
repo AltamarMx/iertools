@@ -124,12 +124,7 @@ class TB:
         df.ts = pd.to_datetime(df.ts,unit='ms')
         df.set_index('ts',inplace=True)
         df.columns = [key]
-        for i,valor in enumerate(df[key]):
-            try:
-                df[key].iloc[i] = float(valor)
-            except:
-                df[key].iloc[i] = np.nan
-        df[key] = df[key].astype("float64")
+        df[key] = pd.to_numeric(df[key], errors="coerce").astype("float64")
 
         #df[key] = pd.to_numeric(df[key])
 #         df = df.resample("60S").pad()
